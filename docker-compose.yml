@@ -1,0 +1,51 @@
+version: "3.7"
+services:
+#  db:
+#    image: "postgres:12"
+#    container_name: "postgres"
+#    ports:
+#      - "5432:5432"
+#    volumes:
+#      - db_data:/var/lib/postgresql/data
+#    env_file:
+#      - .env#
+  db:
+    image: "postgres:12"
+    restart: always
+    environment: &environment
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: labelling
+      PGDATA: /data/postgres
+      PGHOST: db
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+  
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
+  
+  streamlit:
+      build: ./
+      command: streamlit run app/main.py --server.port 8501
+      volumes:
+          - ./:/usr/src/app
+      ports:
+          - 8501:8501
+      image: annotator:latest
+
+    #build:
+    #  context: .
+    #container_name: "streamlit"
+    #ports:
+    #  - "8501:8501"
+
+volumes:
+  db_data:
+
