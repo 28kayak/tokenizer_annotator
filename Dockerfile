@@ -28,7 +28,7 @@
 # cmd to launch app when container is run
 #RUN /db_credentials.sh
 
-#CMD python3 scripts/load_docker_db.py
+
 #CMD streamlit run app.py
 
 FROM python:3.7
@@ -48,3 +48,5 @@ RUN pip install --upgrade pip setuptools wheel \
     && rm -rf /root/.cache/pip
 
 COPY ./ /usr/src/app
+
+CMD python3 scripts/load_docker_db.py
